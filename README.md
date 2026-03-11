@@ -1,42 +1,141 @@
-# sv
+Albania Foods REST-API
+Project Overview
 
-Everything you need to build a Svelte project, powered by [`sv`](https://github.com/sveltejs/cli).
+This project is a REST API for Albanian foods. It allows users to fetch, create, update, and delete traditional Albanian dishes.
 
-## Creating a project
+Public GET endpoints for reading data
 
-If you're seeing this, you've probably already done this step. Congrats!
+Protected POST, PUT, DELETE endpoints using Basic Auth
 
-```sh
-# create a new project
-npx sv create my-app
-```
+All data is returned in JSON format
 
-To recreate this project with the same configuration:
+Fully documented and tested with Postman
 
-```sh
-# recreate this project
-npx sv@0.12.5 create --template minimal --no-types --add prettier eslint --install npm .
-```
+Features
 
-## Developing
+View all foods or a single food item
 
-Once you've created a project and installed dependencies with `npm install` (or `pnpm install` or `yarn`), start a development server:
+Add, update, or delete foods (requires Basic Auth)
 
-```sh
+Clear error messages for invalid requests or authentication
+
+MySQL database with at least 20 food items
+
+Database
+Database Name:
+
+edosha20_albania_foods
+
+Table: foods
+Field	Type	Description
+id	INT PRIMARY KEY AUTO_INCREMENT	Unique ID
+name	VARCHAR(100)	Name of the dish
+region	VARCHAR(100)	Region of Albania
+type	VARCHAR(50)	Type: main dish, dessert, street food, etc.
+ingredients	TEXT	List of ingredients
+description	TEXT	Short description
+calories	INT	Calories per serving
+prep_time_min	INT	Preparation time in minutes
+
+Example entry:
+
+{
+  "id": 1,
+  "name": "Tavë Kosi",
+  "region": "Elbasan",
+  "type": "main dish",
+  "ingredients": "lamb, yogurt, eggs",
+  "description": "Baked lamb with yogurt",
+  "calories": 450,
+  "prep_time_min": 90
+}
+REST API Endpoints
+Public Endpoints (no auth)
+
+GET /api/foods → Get all foods
+
+GET /api/foods/:id → Get a single food by ID
+
+Protected Endpoints (Basic Auth required)
+
+POST /api/foods → Create a new food
+
+PUT /api/foods/:id → Update a food by ID
+
+DELETE /api/foods/:id → Delete a food by ID
+
+If authentication fails: returns 401 Unauthorized
+
+HTTP Status Codes
+
+200 OK → Successful GET/PUT
+
+201 Created → Successful POST
+
+204 No Content → Successful DELETE
+
+400 Bad Request → Invalid input
+
+401 Unauthorized → Missing or wrong Basic Auth
+
+404 Not Found → Food not found
+
+Error responses are in JSON format:
+
+{
+  "error": "Descriptive error message"
+}
+Authentication
+
+Basic Auth required for POST, PUT, DELETE
+
+Example credentials (provided in a separate text file):
+
+Username: edona
+Password: password123
+Setup Instructions
+
+Clone the repository:
+
+git clone <your-repo-url>
+cd albania-foods-api
+npm install
+
+Create .env file with database info:
+
+DB_HOST=localhost
+DB_USER=root
+DB_PASSWORD=
+DB_DATABASE=edosha20_albania_foods
+PORT=5173
+BASIC_AUTH_USER=edona
+BASIC_AUTH_PASS=password123
+
+Run the SvelteKit project:
+
 npm run dev
 
-# or start the server and open the app in a new browser tab
-npm run dev -- --open
-```
+Test endpoints with Postman or cURL
 
-## Building
+Example cURL GET request:
 
-To create a production version of your app:
+curl http://localhost:5173/api/foods
+Git Workflow
 
-```sh
-npm run build
-```
+Make small, frequent commits (at least 2 per hour)
 
-You can preview the production build with `npm run preview`.
+Commit messages in English, e.g.:
 
-> To deploy your app, you may need to install an [adapter](https://svelte.dev/docs/kit/adapters) for your target environment.
+Add GET /api/foods endpoint
+
+Implement Basic Auth for POST, PUT, DELETE
+
+Seed database with 20 Albanian foods
+
+Postman Collection
+
+Fully tested endpoints
+
+Exported JSON included in the repository
+
+Each request includes descriptions and example responses
