@@ -1,10 +1,41 @@
 import pool from '$lib/server/database.js';
+import { API_USER, API_PASS } from '$env/static/private';
 
 
 function checkAuth(request) {
-    const auth = request.headers.get('authorization');
-    if (!auth || !auth.startsWith('Basic ')) return false;
+    const auth = request.headers.get('Authorization');
+    if (!auth?.startsWith('Basic ')) return false;
 
-    const [user, pass] = atob(auth.split(' ')[1]).split(':');
-    return user === process.env.API_USER && pass === process.env.API_PASS;
+    const base64 = auth.slice(6);
+    const decoded = atob(base64);
+    const [user, pass] = decoded.split(':');
+
+    return user === API_USER && pass === API_PASS;
+}
+
+
+export async function GET() {
+    const [rows] = await pool.query('SELECT * FROM foods');
+    return Response.json(rows, { status: 200 });
+}
+
+export async function POST({ request }) {
+    if (!checkAuth(request)) {
+        return Response.json({ message: 'Unauthorized' }, { status: 401 });
+    }
+
+    const { name, region, type, ingredients, description, calories, prep_time_min } = await request.json();
+
+    if (!name || !region || !type || !ingredients || !description) {
+        return Response.json({ message: 'Missing required fields' }, { status: 400 });
+    }
+
+    const [result] = await pool.query(
+        `INSERT INTO foods 
+         (name, region, type, ingredients, description, calories, prep_time_min)
+         VALUES (?, ?, ?, ?, ?, ?, ?)`,
+        [name, region, type, ingredients, description, calories, prep_time_min]
+    );
+
+    return Response.json({ message: 'Food created', id: result.insertId }, { status: 201 });
 }
