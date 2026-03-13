@@ -20,3 +20,23 @@ export async function GET({ params }) {
     return Response.json(rows[0], { status: 200 });
 }
 
+// UPDATE food
+export async function PUT({ params, request }) {
+    if (!checkAuth(request)) {
+        return Response.json({ message: 'Unauthorized' }, { status: 401 });
+    }
+    const { id } = params;
+    const { name, region, type, ingredients, description, calories, prep_time_min } = await request.json();
+    if (!name || !region || !type || !ingredients || !description) {
+        return Response.json({ message: 'Missing required fields' }, { status: 400 });
+    }
+    const [result] = await pool.query(
+        `UPDATE foods SET name=?, region=?, type=?, ingredients=?, description=?, calories=?, prep_time_min=? WHERE id=?`,
+        [name, region, type, ingredients, description, calories, prep_time_min, id]
+    );
+    if (result.affectedRows === 0) {
+        return Response.json({ message: 'Food not found' }, { status: 404 });
+    }
+    return Response.json({ message: 'Food updated' }, { status: 200 });
+}
+
