@@ -1,45 +1,44 @@
 Albania Foods REST-API
-Projektübersicht
+Project Overview
 
-Dies ist eine REST-API für traditionelle albanische Gerichte.
-Sie ermöglicht, Lebensmittel abzurufen, hinzuzufügen, zu aktualisieren oder zu löschen.
+This project is a REST API for traditional Albanian foods.
+It allows users to fetch, create, update, and delete food items.
 
-Highlights:
+Public GET endpoints for reading data
 
-Öffentliche GET-Endpunkte für das Abrufen von Daten
+Protected POST, PUT, DELETE endpoints using Basic Auth
 
-Geschützte POST-, PUT- und DELETE-Endpunkte (Basic Auth, Passwort nicht veröffentlicht)
+All data is returned in JSON format
 
-Alle Daten im JSON-Format
-
-Vollständig dokumentiert und getestet mit Postman
+Fully documented and tested with Postman
 
 Features
 
-Alle Lebensmittel auflisten oder ein einzelnes Lebensmittel abrufen
+View all foods or a single food item
 
-Lebensmittel hinzufügen, bearbeiten oder löschen (geschützt)
+Add, update, or delete foods (requires Basic Auth)
 
-Klare Fehlermeldungen für ungültige Anfragen oder fehlende Authentifizierung
+Clear error messages for invalid requests or authentication
 
-MySQL-Datenbank mit mindestens 20 Lebensmitteln
+MySQL database with at least 20 food items
 
-Datenbank
+Database
 
-Datenbankname: edosha20_albania_foods
-Tabelle: foods
+Database Name: edosha20_albania_foods
 
-Feld	Typ	Beschreibung
-id	INT PRIMARY KEY AUTO_INCREMENT	Eindeutige ID
-name	VARCHAR(100)	Name des Gerichts
-region	VARCHAR(100)	Region in Albanien
-type	VARCHAR(50)	Typ: Hauptgericht, Dessert, Street Food, etc.
-ingredients	TEXT	Zutatenliste
-description	TEXT	Kurze Beschreibung
-calories	INT	Kalorien pro Portion
-prep_time_min	INT	Zubereitungszeit in Minuten
+Table: foods
 
-Beispiel-Eintrag:
+Field	Type	Description
+id	INT	Unique ID, primary key
+name	VARCHAR(100)	Name of the dish
+region	VARCHAR(100)	Region of Albania
+type	VARCHAR(50)	Type: main dish, dessert, street food, etc.
+ingredients	TEXT	List of ingredients
+description	TEXT	Short description
+calories	INT	Calories per serving
+prep_time_min	INT	Preparation time in minutes
+
+Example entry:
 
 {
   "id": 1,
@@ -51,72 +50,82 @@ Beispiel-Eintrag:
   "calories": 450,
   "prep_time_min": 90
 }
-REST-API Endpoints
-Öffentliche Endpunkte (kein Auth erforderlich)
-Methode	Endpoint	Beschreibung
-GET	/api/foods	Liste aller Lebensmittel
-GET	/api/foods/:id	Ein Lebensmittel nach ID abrufen
-Geschützte Endpunkte (Basic Auth erforderlich)
-Methode	Endpoint	Beschreibung
-POST	/api/foods	Neues Lebensmittel hinzufügen
-PUT	/api/foods/:id	Lebensmittel aktualisieren
-DELETE	/api/foods/:id	Lebensmittel löschen
+REST API Endpoints
+Public Endpoints (no authentication)
 
-Hinweis: Bei fehlender oder falscher Authentifizierung wird 401 Unauthorized zurückgegeben.
+GET /api/foods → Get all foods
+
+GET /api/foods/:id → Get a single food by ID
+
+Protected Endpoints (Basic Auth required)
+
+POST /api/foods → Create a new food
+
+PUT /api/foods/:id → Update a food by ID
+
+DELETE /api/foods/:id → Delete a food by ID
+
+If authentication fails: returns 401 Unauthorized.
 
 HTTP Status Codes
-Code	Bedeutung
-200	OK – GET oder PUT erfolgreich
-201	Created – POST erfolgreich
-204	No Content – DELETE erfolgreich
-400	Bad Request – Ungültige Eingaben
-401	Unauthorized – Auth fehlt oder falsch
-404	Not Found – Lebensmittel nicht gefunden
+Code	Meaning
+200	OK (successful GET/PUT)
+201	Created (successful POST)
+204	No Content (successful DELETE)
+400	Bad Request (invalid input)
+401	Unauthorized (missing or wrong Basic Auth)
+404	Not Found (food not found)
 
-Fehlerantworten im JSON-Format:
+Error responses are always JSON:
 
 { "error": "Descriptive error message" }
+Authentication
+
+Basic Auth is required for POST, PUT, DELETE requests
+
+Example credentials provided separately (do not include passwords in public repos)
+
 Setup Instructions
 
-Repository klonen:
+Clone the repository:
 
-git clone <repository-link>
+git clone <your-repo-link>
 cd albania-foods-api
 npm install
 
-.env Datei erstellen (Datenbank- und Auth-Daten lokal speichern):
+Create a .env file with your database info:
 
 DB_HOST=localhost
 DB_USER=root
-DB_PASSWORD=<your-local-password>
+DB_PASSWORD=
 DB_DATABASE=edosha20_albania_foods
 PORT=5173
 BASIC_AUTH_USER=<your-username>
 BASIC_AUTH_PASS=<your-password>
 
-Projekt starten:
+Run the project:
 
 npm run dev
 
-Endpoints mit Postman oder cURL testen:
+Test endpoints using Postman or cURL:
 
 curl http://localhost:5173/api/foods
 Git Workflow
 
-Kleine, häufige Commits (mind. 2 pro Arbeitsstunde)
+Make small, frequent commits (at least 2 per hour)
 
-Commit-Messages in Englisch, z.B.:
+Commit messages in English, e.g.:
 
 Add GET /api/foods endpoint
 
-Implement Basic Auth for POST, PUT, DELETE
+Implement Basic Auth for write endpoints
 
 Seed database with 20 Albanian foods
 
 Postman Collection
 
-Vollständig getestete Endpoints
+Fully tested endpoints
 
-JSON-Export im Repository enthalten
+Exported JSON included in the repository
 
-Jede Anfrage enthält Beschreibung und Beispielantworten
+Each request includes descriptions and example responses
